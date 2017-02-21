@@ -1,0 +1,44 @@
+- if issue.new_record?
+  - action = "/issues"
+  - submit = "Create issue"
+  - form_title = "New issue"
+- else
+  - action = "/issues/#{issue.id}"
+  - submit = "Update issue"
+  - form_title = "Edir issue"
+
+%h1 #{form_title}
+%form(action="#{action}" method="post")
+  -if issue.errors.any?
+    .panel.panel-danger
+      .panel-body
+        %ul
+          -issue.errors.full_messages.each do |error|
+            %li=error
+  %p
+    %label(for="issue_name") Name
+    %input(type="text" id="issue_name" value="#{issue.name}" name="issue[name]" class="form-control")
+
+  %p
+    %label(for="issue_status") Status
+    %select(name="issue[status]")
+      -Issue::STATUSES.each do |status|
+        %option{value: status, selected: status == issue.status ? "selected" : false}=status
+    
+  %p
+    %label(for="issue_description") Description
+    %textarea(name="issue[description]" class="form-control") 
+      = issue.description
+      
+  %p
+    %label(for="issue_project") Project
+    %select(name="issue[project_id]")
+      -Project.all.each do |project|
+        %option{value: project.id, selected: project.id == issue.project_id ? "selected" : false}=project.name    
+    
+      
+  %p
+    -unless issue.new_record?
+      %input(type="hidden" name="_method" value="put")  
+    %button.btn.btn-primary
+      #{submit}

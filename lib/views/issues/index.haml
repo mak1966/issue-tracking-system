@@ -1,0 +1,34 @@
+%h1 All Issues
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th.col-md-2 Name
+      %th.col-md-2 Description
+      %th.col-md-2 Project      
+      %th.col-md-3 Created at
+      %th.col-md-1 Status
+      %th.col-md-2 Actions
+  -@issues.each do |issue|
+    %tr
+      %td
+        %a(href="/issues/#{issue.id}")=issue.name
+      %td=issue.description
+      %th=Project.find({id: issue.project_id}).name      
+      %td=issue.id.generation_time.ago_in_words
+      %td=issue.status
+      %td
+        %a.btn.btn-primary.btn-xs(href="/issues/#{issue.id}/edit") Edit
+        %a.btn.btn-danger.btn-xs(href="/issues/#{issue.id}/delete") Delete        
+  -unless @issues.any?
+    %tfoot
+      %tr
+        %th
+          There are no issues.
+          %a.btn.btn-primary(href="/issues/new") Create one
+
+.text-center
+  %ul.pagination
+    -(1..@pagination.last_page).each do |page|
+      %li{class: [@pagination.current_page == page ? "active" : ""]}
+        %a{href: "?page=#{page}" }=page

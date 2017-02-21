@@ -1,0 +1,33 @@
+%h1 All Projects
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th.col-md-3 Name
+      %th.col-md-3 Description
+      %th.col-md-1 Issues
+      %th.col-md-3 Created at
+      %th.col-md-2 Actions
+  -@projects.each do |project|
+    %tr
+      %td
+        %a(href="/projects/#{project.id}")=project.name
+      %td=project.description
+      %td=project.issues.count
+      %td=project.id.generation_time.ago_in_words
+      %td
+        %a.btn.btn-primary.btn-xs(href="/projects/#{project.id}/edit") Edit
+        %a.btn.btn-danger.btn-xs(href="/projects/#{project.id}/delete") Delete        
+  -unless @projects.any?
+    %tfoot
+      %tr
+        %th
+          There are no projects.
+          %a.btn.btn-primary(href="/projects/new") Create one
+
+.text-center
+  %ul.pagination
+    -if @pagination.last_page > 1
+      -(1..@pagination.last_page).each do |page|
+        %li{class: [@pagination.current_page == page ? "active" : ""]}
+          %a{href: "?page=#{page}" }=page

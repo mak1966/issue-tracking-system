@@ -1,0 +1,6 @@
+development:
+  clients:
+    default:
+      database: issuetracker_dev
+      hosts:
+        - localhost:27017

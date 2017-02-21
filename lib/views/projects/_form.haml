@@ -1,0 +1,30 @@
+- if project.new_record?
+  - action = "/projects"
+  - submit = "Create project"
+  - form_title = "New project"
+- else
+  - action = "/projects/#{project.id}"
+  - submit = "Update project"
+  - form_title = "Edit project"
+
+%h1 #{form_title}
+%form(action="#{action}" method="post")
+  -if project.errors.any?
+    .panel.panel-danger
+      .panel-body
+        %ul
+          -project.errors.full_messages.each do |error|
+            %li=error
+  %p
+    %label(for="project_name") Name
+    %input(type="text" id="project_name" value="#{project.name}" name="project[name]" class="form-control")
+
+  %p
+    %label(for="project_description") Description
+    %textarea(name="project[description]" class="form-control") 
+      = project.description
+  %p
+    -unless project.new_record?
+      %input(type="hidden" name="_method" value="put")  
+    %button.btn.btn-primary
+      #{submit}

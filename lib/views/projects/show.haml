@@ -1,0 +1,21 @@
+%h1 #{@project.name}
+.well
+  %p
+    %strong
+      #{@project.description}
+  %p Created #{@project.id.generation_time.ago_in_words}
+  
+%h3 All Issues:
+
+%ul.list-unstyled
+  -@project.issues.each do |issue|
+    %li
+      %blockquote
+        %p=issue.description
+        %footer
+          %strong
+            %a.btn.btn-link(href="/issues/#{issue.id}") #{issue.name}
+          %p
+            #{issue.comments.count} Comments | 
+            %a.btn.btn-link(href="/issues/#{issue.id}/edit") Edit
+            %em=issue.id.generation_time.ago_in_words
